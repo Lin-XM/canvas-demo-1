@@ -8,29 +8,36 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="canvas">小米</div>
+    <canvas id="canvas" id="100"></canvas>
     <script>
-      canvas.onclick = (e) => {
-        // console.log(e); console调试
-        console.log(e.clientX);
-        console.log(e.clientY);
-        // 创建一个div
-        let div = document.createElement("div");
-        // 让div的位置为上面的坐标。
-        // div.style.border = "1px solid black";
-        div.style.position = "absolute";
-        div.style.left = e.clientX + "px";
-        div.style.top = e.clientY + "px";
-        div.style.width = "6px";
-        div.style.height = "6px";
-        // 此时div只是在内存中，并不会出现在页面里
-        canvas.appendChild(div); //使得div出现
-        // 此时出现的框并不是在鼠标指针的中间
-        div.style.marginLeft = "-3px";
-        div.style.marginTop = "-3px";
-        // 将框框变成圆的
-        div.style.borderRadius = "50%";
-        div.style.backgroundColor = "black";
+      let canvas = document.getElementById("canvas");
+      // 获取当前页面的宽高
+      canvas.height = document.documentElement.clientHeight;
+      canvas.width = document.documentElement.clientWidth;
+      let ctx = canvas.getContext("2d");
+      //这些一个表示填充颜色，填充的位置和高宽
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "none";
+      // 设置一个信号
+      let painting = false;
+      canvas.onmousedown = (e) => {
+        painting = true;
+      };
+      canvas.onmousemove = (e) => {
+        if (painting === true) {
+          //   console.log(e.clientX);
+          //   console.log(e.clientY);
+          //   ctx.fillRect(e.clientX - 2, e.clientY - 2, 4, 4);
+          ctx.beginPath();
+          ctx.arc(e.clientX, e.clientY, 4, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.fill();
+        } else {
+          console.log("我就摆烂");
+        }
+        canvas.onmouseup = () => {
+          painting = false;
+        };
       };
     </script>
   </body>
