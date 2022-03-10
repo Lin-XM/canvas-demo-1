@@ -5,6 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>画板</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <div id="canvas">小米</div>
+    <script>
+      canvas.onclick = (e) => {
+        // console.log(e); console调试
+        console.log(e.clientX);
+        console.log(e.clientY);
+        // 创建一个div
+        let div = document.createElement("div");
+        // 让div的位置为上面的坐标。
+        // div.style.border = "1px solid black";
+        div.style.position = "absolute";
+        div.style.left = e.clientX + "px";
+        div.style.top = e.clientY + "px";
+        div.style.width = "6px";
+        div.style.height = "6px";
+        // 此时div只是在内存中，并不会出现在页面里
+        canvas.appendChild(div); //使得div出现
+        // 此时出现的框并不是在鼠标指针的中间
+        div.style.marginLeft = "-3px";
+        div.style.marginTop = "-3px";
+        // 将框框变成圆的
+        div.style.borderRadius = "50%";
+        div.style.backgroundColor = "black";
+      };
+    </script>
+  </body>
 </html>
