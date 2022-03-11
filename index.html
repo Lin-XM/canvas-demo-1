@@ -20,25 +20,45 @@
       ctx.strokeStyle = "none";
       // 设置一个信号
       let painting = false;
-      canvas.onmousedown = (e) => {
-        painting = true;
-      };
-      canvas.onmousemove = (e) => {
-        if (painting === true) {
-          //   console.log(e.clientX);
-          //   console.log(e.clientY);
-          //   ctx.fillRect(e.clientX - 2, e.clientY - 2, 4, 4);
+      var isTouchDevice = "ontouchstart" in document.documentElement;
+      console.log(isTouchDevice);
+      // 判断是否为手机
+      if (isTouchDevice) {
+        console.log("手机");
+        // 此时事件中touches中会有clientX和clientY
+        canvas.ontouchmove = (e) => {
+          // console.log(e);
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          console.log(x, y);
+          // 下面代码就是画圆的
           ctx.beginPath();
-          ctx.arc(e.clientX, e.clientY, 4, 0, 2 * Math.PI);
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
           ctx.stroke();
           ctx.fill();
-        } else {
-          console.log("我就摆烂");
-        }
-        canvas.onmouseup = () => {
-          painting = false;
         };
-      };
+      } else {
+        canvas.onmousedown = (e) => {
+          painting = true;
+        };
+        canvas.onmousemove = (e) => {
+          if (painting === true) {
+            //   console.log(e.clientX);
+            //   console.log(e.clientY);
+            //   ctx.fillRect(e.clientX - 2, e.clientY - 2, 4, 4);
+            // 下面代码就是画圆的
+            ctx.beginPath();
+            ctx.arc(e.clientX, e.clientY, 4, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fill();
+          } else {
+            console.log("我就摆烂");
+          }
+          canvas.onmouseup = () => {
+            painting = false;
+          };
+        };
+      }
     </script>
   </body>
 </html>
