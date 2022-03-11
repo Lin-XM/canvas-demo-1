@@ -11,13 +11,26 @@
     <canvas id="canvas" id="100"></canvas>
     <script>
       let canvas = document.getElementById("canvas");
+      //记住上一个点
+      let lastPoint = [];
       // 获取当前页面的宽高
       canvas.height = document.documentElement.clientHeight;
       canvas.width = document.documentElement.clientWidth;
       let ctx = canvas.getContext("2d");
       //这些一个表示填充颜色，填充的位置和高宽
       ctx.fillStyle = "black";
-      ctx.strokeStyle = "none";
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 20;
+      ctx.lineCap = "round";
+      // 设置一个划线的函数
+      function drawLine(x1, y1, x2, y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        // ctx.lineTo(0, 100);
+        ctx.stroke();
+      }
+      // drawLine(100, 100, 200, 200);
       // 设置一个信号
       let painting = false;
       var isTouchDevice = "ontouchstart" in document.documentElement;
@@ -25,32 +38,31 @@
       // 判断是否为手机
       if (isTouchDevice) {
         console.log("手机");
+        canvas.ontouchstart = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          lastPoint = [x, y];
+        };
         // 此时事件中touches中会有clientX和clientY
         canvas.ontouchmove = (e) => {
           // console.log(e);
           let x = e.touches[0].clientX;
           let y = e.touches[0].clientY;
-          console.log(x, y);
-          // 下面代码就是画圆的
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, 2 * Math.PI);
-          ctx.stroke();
-          ctx.fill();
+          drawLine(lastPoint[0], lastPoint[1], x, y);
+          // 更新lastpoint
+          lastPoint = [x, y];
         };
       } else {
         canvas.onmousedown = (e) => {
           painting = true;
+          lastPoint = [e.clientX, e.clientY];
         };
         canvas.onmousemove = (e) => {
           if (painting === true) {
-            //   console.log(e.clientX);
-            //   console.log(e.clientY);
-            //   ctx.fillRect(e.clientX - 2, e.clientY - 2, 4, 4);
-            // 下面代码就是画圆的
-            ctx.beginPath();
-            ctx.arc(e.clientX, e.clientY, 4, 0, 2 * Math.PI);
-            ctx.stroke();
-            ctx.fill();
+            // 下面代码就是划线的
+            drawLine(lastPoint[0], lastPoint[1], e.clientX, e.clientY);
+            // 更新lastpoint
+            lastPoint = [e.clientX, e.clientY];
           } else {
             console.log("我就摆烂");
           }
